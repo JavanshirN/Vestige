@@ -26,6 +26,6 @@ final class HomeViewModel {
     }
 
     var userName: String {
-        return "Javanshir"
+        UserSession.name.isEmpty ? "Guest" : UserSession.name
     }
 }

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D3011EAB309C91BB002995F3 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D3011EAA309C91BB002995F3 /* FirebaseAuth */; };
+		D3011EAD309C91BB002995F3 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D3011EAC309C91BB002995F3 /* FirebaseDatabase */; };
+		D3011EAF309C91BB002995F3 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D3011EAE309C91BB002995F3 /* FirebaseFirestore */; };
+		D3011EB1309C91BB002995F3 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = D3011EB0309C91BB002995F3 /* FirebaseMessaging */; };
 		D3CA8B50305D28B10008E7D1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D3CA8B4F305D28B10008E7D1 /* SnapKit */; };
 /* End PBXBuildFile section */
 
@@ -18,7 +22,7 @@
 		D3CA8B3D305D26AB0008E7D1 /* Exceptions for "Vestige" folder in "Vestige" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				App/Info.plist,
 			);
 			target = D3CA8B2A305D26A90008E7D1 /* Vestige */;
 		};
@@ -40,7 +44,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3011EAD309C91BB002995F3 /* FirebaseDatabase in Frameworks */,
+				D3011EAF309C91BB002995F3 /* FirebaseFirestore in Frameworks */,
+				D3011EB1309C91BB002995F3 /* FirebaseMessaging in Frameworks */,
 				D3CA8B50305D28B10008E7D1 /* SnapKit in Frameworks */,
+				D3011EAB309C91BB002995F3 /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,6 +92,10 @@
 			name = Vestige;
 			packageProductDependencies = (
 				D3CA8B4F305D28B10008E7D1 /* SnapKit */,
+				D3011EAA309C91BB002995F3 /* FirebaseAuth */,
+				D3011EAC309C91BB002995F3 /* FirebaseDatabase */,
+				D3011EAE309C91BB002995F3 /* FirebaseFirestore */,
+				D3011EB0309C91BB002995F3 /* FirebaseMessaging */,
 			);
 			productName = Vestige;
 			productReference = D3CA8B2B305D26A90008E7D1 /* Vestige.app */;
@@ -115,6 +127,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D3CA8B4E305D28B10008E7D1 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				D3011EA9309C91BB002995F3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D3CA8B2C305D26A90008E7D1 /* Products */;
@@ -155,7 +168,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Vestige/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -185,7 +197,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Vestige/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -354,6 +365,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		D3011EA9309C91BB002995F3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.1.1;
+			};
+		};
 		D3CA8B4E305D28B10008E7D1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -365,6 +384,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D3011EAA309C91BB002995F3 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3011EA9309C91BB002995F3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		D3011EAC309C91BB002995F3 /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3011EA9309C91BB002995F3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
+		D3011EAE309C91BB002995F3 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3011EA9309C91BB002995F3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		D3011EB0309C91BB002995F3 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3011EA9309C91BB002995F3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
 		D3CA8B4F305D28B10008E7D1 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D3CA8B4E305D28B10008E7D1 /* XCRemoteSwiftPackageReference "SnapKit" */;

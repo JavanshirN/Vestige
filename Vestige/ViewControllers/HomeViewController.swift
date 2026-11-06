@@ -13,6 +13,11 @@ final class HomeViewController: UIViewController {
     
     private let viewModel = HomeViewModel()
     
+    private let memoryImageNames = ["Culture", "Everyday", "memory1", "memory2", "Nature", "Travel"]
+    
+    private let repeatCount = 3
+    private var didSetInitialOffset = false
+    
     private let backgroundImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "homebackground")
@@ -55,12 +60,7 @@ final class HomeViewController: UIViewController {
     
     private let memoryCard: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(
-            red: 0.94,
-            green: 0.91,
-            blue: 0.84,
-            alpha: 0.96
-        )
+        view.backgroundColor = AppColor.cream.withAlphaComponent(0.96)
         view.layer.cornerRadius = 28
         view.clipsToBounds = true
         return view
@@ -69,12 +69,7 @@ final class HomeViewController: UIViewController {
     private let memoryTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Your Memories"
-        label.textColor = UIColor(
-            red: 0.17,
-            green: 0.21,
-            blue: 0.18,
-            alpha: 1
-        )
+        label.textColor = AppColor.green
         label.font = UIFont(name: "CormorantGaramond-Regular", size: 32) ?? .systemFont(ofSize: 32, weight: .regular)
         return label
     }()
@@ -82,7 +77,7 @@ final class HomeViewController: UIViewController {
     private let memoryDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Every moment has a story."
-        label.textColor = .darkGray
+        label.textColor = AppColor.secondaryText
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.numberOfLines = 0
         return label
@@ -91,44 +86,29 @@ final class HomeViewController: UIViewController {
     private let memoryIconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "book.closed")
-        imageView.tintColor = UIColor(
-            red: 0.22,
-            green: 0.32,
-            blue: 0.26,
-            alpha: 1
-        )
+        imageView.tintColor = AppColor.green
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
-    private let memoryImage1: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "memory1")
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 14
-        return imageView
+    private let imagesScrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.showsHorizontalScrollIndicator = false
+        return scrollView
     }()
     
-    private let memoryImage2: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "memory2")
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 14
-        return imageView
+    private let imagesStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 12
+        return stackView
     }()
     
     private let plusButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "plus"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = UIColor(
-            red: 0.22,
-            green: 0.32,
-            blue: 0.26,
-            alpha: 1
-        )
+        button.tintColor = AppColor.cream
+        button.backgroundColor = AppColor.green
         button.layer.cornerRadius = 26
         return button
     }()
@@ -139,19 +119,37 @@ final class HomeViewController: UIViewController {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        nameLabel.text = AuthService.shared.currentUser?.name ?? "Friend"
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if !didSetInitialOffset && imagesScrollView.bounds.width > 0 {
+            didSetInitialOffset = true
+            imagesScrollView.layoutIfNeeded()
+            imagesScrollView.contentOffset.x = oneSetWidth
+        }
+    }
+    
+    private var oneSetWidth: CGFloat {
+        let itemWidth = imagesScrollView.bounds.width * 0.43
+        return (itemWidth + imagesStackView.spacing) * CGFloat(memoryImageNames.count)
+    }
+    
     private func setupUI() {
-        view.backgroundColor = UIColor(
-            red: 0.12,
-            green: 0.17,
-            blue: 0.15,
-            alpha: 1
-        )
+        view.backgroundColor = AppColor.green
         
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        [backgroundImageView, overlayView, greetingLabel, nameLabel, subtitleLabel, memoryCard].forEach {view.addSubview($0)}
+        [backgroundImageView, overlayView, greetingLabel, nameLabel, subtitleLabel, memoryCard].forEach { view.addSubview($0) }
         
-        [memoryTitleLabel, memoryDescriptionLabel, memoryIconImageView, memoryImage1, memoryImage2, plusButton].forEach {memoryCard.addSubview($0)}
+        [memoryTitleLabel, memoryDescriptionLabel, memoryIconImageView, imagesScrollView, plusButton].forEach { memoryCard.addSubview($0) }
+        
+        imagesScrollView.addSubview(imagesStackView)
+        imagesScrollView.delegate = self
 
         greetingLabel.text = viewModel.greeting
         nameLabel.text = viewModel.userName
@@ -202,19 +200,15 @@ final class HomeViewController: UIViewController {
             make.width.height.equalTo(24)
         }
         
-        memoryImage1.snp.makeConstraints { make in
+        imagesScrollView.snp.makeConstraints { make in
             make.top.equalTo(memoryDescriptionLabel.snp.bottom).offset(18)
-            make.leading.equalToSuperview().inset(16)
-            make.width.equalToSuperview().multipliedBy(0.43)
+            make.leading.trailing.equalToSuperview()
             make.height.equalTo(190)
         }
         
-        memoryImage2.snp.makeConstraints { make in
-            make.top.equalTo(memoryImage1)
-            make.leading.equalTo(memoryImage1.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().inset(16)
-            make.width.equalTo(memoryImage1)
-            make.height.equalTo(memoryImage1)
+        imagesStackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16))
+            make.height.equalToSuperview()
         }
         
         plusButton.snp.makeConstraints { make in
@@ -222,7 +216,27 @@ final class HomeViewController: UIViewController {
             make.width.height.equalTo(52)
         }
         
+        addMemoryImages()
+        
         plusButton.addTarget(self, action: #selector(addMemoryTapped), for: .touchUpInside)
+    }
+    
+    private func addMemoryImages() {
+        for _ in 0..<repeatCount {
+            for name in memoryImageNames {
+                let imageView = UIImageView()
+                imageView.image = UIImage(named: name)
+                imageView.contentMode = .scaleAspectFill
+                imageView.clipsToBounds = true
+                imageView.layer.cornerRadius = 14
+                
+                imagesStackView.addArrangedSubview(imageView)
+                
+                imageView.snp.makeConstraints { make in
+                    make.width.equalTo(memoryCard).multipliedBy(0.43)
+                }
+            }
+        }
     }
     
     @objc private func addMemoryTapped() {
@@ -239,5 +253,20 @@ final class HomeViewController: UIViewController {
         
         alert.addAction(okAction)
         present(alert, animated: true)
+    }
+}
+
+extension HomeViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView == imagesScrollView, didSetInitialOffset else { return }
+        
+        let setWidth = oneSetWidth
+        
+        if scrollView.contentOffset.x <= 0 {
+            scrollView.contentOffset.x += setWidth
+        } else if scrollView.contentOffset.x >= setWidth * 2 {
+            scrollView.contentOffset.x -= setWidth
+        }
     }
 }

@@ -16,20 +16,10 @@ class MainTabBarViewController: UITabBarController {
     }
     
     private func setupTabs(){
-        let homeVC = UINavigationController(
-            rootViewController: HomeViewController()
-        )
-        let exploreVC = UINavigationController(
-            rootViewController: ExploreViewController()
-        )
-
-        let chatsVC = UINavigationController(
-            rootViewController: ChatsViewController()
-        )
-
-        let profileVC = UINavigationController(
-            rootViewController: ProfileViewController()
-        )
+        let homeVC = UINavigationController(rootViewController: HomeViewController())
+        let exploreVC = UINavigationController(rootViewController: ExploreViewController())
+        let chatVC = UINavigationController(rootViewController: ChatListViewController())
+        let profileVC = UINavigationController(rootViewController: ProfileViewController())
         
         homeVC.tabBarItem = UITabBarItem(
             title: "Home",
@@ -43,10 +33,10 @@ class MainTabBarViewController: UITabBarController {
             selectedImage: nil
         )
 
-        chatsVC.tabBarItem = UITabBarItem(
-            title: "Chats",
-            image: UIImage(systemName: "message"),
-            selectedImage: UIImage(systemName: "message.fill")
+        chatVC.tabBarItem = UITabBarItem(
+            title: "Chat",
+            image: UIImage(systemName: "bubble.left.and.bubble.right"),
+            tag: 2
         )
 
         profileVC.tabBarItem = UITabBarItem(
@@ -58,7 +48,7 @@ class MainTabBarViewController: UITabBarController {
         viewControllers = [
             homeVC,
             exploreVC,
-            chatsVC,
+            chatVC,
             profileVC
         ]
     }

@@ -96,6 +96,7 @@ final class ExploreViewController: UIViewController {
         searchTextField.returnKeyType = .search
         searchTextField.clearButtonMode = .whileEditing
         searchTextField.delegate = self
+        searchTextField.addTarget(self, action: #selector(searchChanged), for: .editingChanged)
         
         searchContainer.addSubview(searchIcon)
         searchContainer.addSubview(searchTextField)
@@ -270,6 +271,10 @@ final class ExploreViewController: UIViewController {
         }
     }
     
+    @objc private func searchChanged() {
+        filterMoments()
+    }
+    
     private func filterMoments() {
         let query = searchTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         
@@ -284,27 +289,6 @@ final class ExploreViewController: UIViewController {
 }
 
 extension ExploreViewController: UITextFieldDelegate {
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let currentText = textField.text ?? ""
-        
-        guard let textRange = Range(range, in: currentText) else {
-            return true
-        }
-        
-        let updatedText = currentText.replacingCharacters(
-            in: textRange,
-            with: string
-        )
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.searchTextField.text = updatedText
-            self?.filterMoments()
-        }
-        
-        return true
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
